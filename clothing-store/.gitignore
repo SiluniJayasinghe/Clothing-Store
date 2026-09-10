@@ -1,0 +1,24 @@
+# dependencies
+node_modules/
+client/node_modules/
+server/node_modules/
+
+# environment variables
+.env
+client/.env
+server/.env
+
+# build output
+dist/
+client/dist/
+server/dist/
+
+# logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
