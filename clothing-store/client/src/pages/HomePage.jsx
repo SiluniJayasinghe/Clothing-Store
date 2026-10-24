@@ -13,6 +13,10 @@ import {
   TruckIcon,
 } from "../components/Icons";
 
+import {
+  getProductImageSizeClass
+} from "../utils/productImageSizing";
+
 function HomePage() {
   const [allProducts, setAllProducts] = useState([]);
 
@@ -286,7 +290,11 @@ function HomePage() {
                 className="category-card"
               >
                 <div className="category-image-wrap">
-                  <img src={product.image} alt={name} />
+                  <img
+                    src={product.image}
+                    alt={name}
+                    className={getProductImageSizeClass(product.name)}
+                  />
                 </div>
 
                 <div className="category-card-copy">

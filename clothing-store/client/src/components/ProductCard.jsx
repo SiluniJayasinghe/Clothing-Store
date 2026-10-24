@@ -17,6 +17,10 @@ import {
   HeartIcon
 } from "./Icons";
 
+import {
+  getProductImageSizeClass
+} from "../utils/productImageSizing";
+
 function ProductCard({
   product
 }) {
@@ -100,7 +104,7 @@ function ProductCard({
           <img
             src={product.image}
             alt={product.name}
-            className="product-card-image"
+            className={`product-card-image ${getProductImageSizeClass(product.name)}`}
           />
         </div>
 

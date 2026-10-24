@@ -22,6 +22,10 @@ import {
   TruckIcon
 } from "../components/Icons";
 
+import {
+  getProductImageSizeClass
+} from "../utils/productImageSizing";
+
 function ProductDetailsPage() {
   const {
     id
@@ -452,6 +456,9 @@ function ProductDetailsPage() {
             }
             alt={
               `${product.name} ${selectedColor}`
+            }
+            className={
+              getProductImageSizeClass(product.name)
             }
           />
         </div>

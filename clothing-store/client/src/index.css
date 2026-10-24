@@ -999,6 +999,63 @@ h2 {
   transition: transform 0.3s ease;
 }
 
+.product-card-image.product-image--reduced,
+.category-image-wrap img.product-image--reduced,
+.product-image-panel > img.product-image--reduced,
+.look-product-image img.product-image--reduced {
+  width: 85%;
+  height: 85%;
+}
+
+.product-card-image.product-image--more-reduced,
+.category-image-wrap img.product-image--more-reduced,
+.product-image-panel > img.product-image--more-reduced,
+.look-product-image img.product-image--more-reduced {
+  width: 86%;
+  height: 86%;
+}
+
+.product-card-image.product-image--further-reduced,
+.category-image-wrap img.product-image--further-reduced,
+.product-image-panel > img.product-image--further-reduced,
+.look-product-image img.product-image--further-reduced {
+  width: 82%;
+  height: 82%;
+}
+
+.product-card-image.product-image--most-reduced,
+.category-image-wrap img.product-image--most-reduced,
+.product-image-panel > img.product-image--most-reduced,
+.look-product-image img.product-image--most-reduced {
+  width: 78%;
+  height: 78%;
+}
+
+.product-card-image.product-image--graphic-tee-reduced,
+.category-image-wrap img.product-image--graphic-tee-reduced,
+.product-image-panel > img.product-image--graphic-tee-reduced,
+.look-product-image img.product-image--graphic-tee-reduced {
+  width: 91%;
+  height: 91%;
+}
+
+.product-card-image.product-image--slightly-reduced,
+.category-image-wrap img.product-image--slightly-reduced,
+.product-image-panel > img.product-image--slightly-reduced,
+.look-product-image img.product-image--slightly-reduced {
+  width: 92%;
+  height: 92%;
+}
+
+.product-card-image.product-image--almost-full-size,
+.category-image-wrap img.product-image--almost-full-size,
+.product-image-panel > img.product-image--almost-full-size,
+.look-product-image img.product-image--almost-full-size {
+  width: 100%;
+  height: 100%;
+  scale: 1.1;
+}
+
 .product-card:hover .product-card-image {
   transform: translateY(-2px);
 }
@@ -4783,19 +4840,6 @@ svg {
     width: 100%;
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

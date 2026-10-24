@@ -25,6 +25,10 @@ import {
   SparklesIcon
 } from "../components/Icons";
 
+import {
+  getProductImageSizeClass
+} from "../utils/productImageSizing";
+
 function ShopTheLookPage() {
   const {
     lookId
@@ -399,6 +403,9 @@ function ShopTheLookPage() {
                   alt={
                     topProduct.name
                   }
+                  className={
+                    getProductImageSizeClass(topProduct.name)
+                  }
                 />
               </div>
 
@@ -506,6 +513,9 @@ function ShopTheLookPage() {
                   }
                   alt={
                     bottomProduct.name
+                  }
+                  className={
+                    getProductImageSizeClass(bottomProduct.name)
                   }
                 />
               </div>
