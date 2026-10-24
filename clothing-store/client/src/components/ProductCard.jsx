@@ -80,12 +80,6 @@ function ProductCard({
         className="product-card-link"
       >
         <div className="product-card-image-wrap">
-          {product.featured && (
-            <span className="product-badge">
-              Featured
-            </span>
-          )}
-
           <button
             type="button"
             className={
