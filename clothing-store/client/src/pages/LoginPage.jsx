@@ -17,8 +17,9 @@ function LoginPage() {
   const navigate =
     useNavigate();
 
-  const { login } =
-    useAuth();
+  const {
+    login
+  } = useAuth();
 
   const [
     email,
@@ -31,15 +32,29 @@ function LoginPage() {
   ] = useState("");
 
   const [
+    showPassword,
+    setShowPassword
+  ] = useState(false);
+
+  const [
     error,
     setError
   ] = useState("");
+
+  const [
+    submitting,
+    setSubmitting
+  ] = useState(false);
 
   const handleSubmit =
     async (event) => {
       event.preventDefault();
 
       setError("");
+
+      setSubmitting(
+        true
+      );
 
       try {
         const response =
@@ -57,68 +72,163 @@ function LoginPage() {
         );
 
         navigate("/");
-      } catch (error) {
+      } catch (
+        loginError
+      ) {
         setError(
-          error.response?.data
+          loginError
+            .response
+            ?.data
             ?.message ||
             "Login failed"
+        );
+      } finally {
+        setSubmitting(
+          false
         );
       }
     };
 
   return (
     <main className="auth-page">
-      <form
-        className="auth-card"
-        onSubmit={handleSubmit}
-      >
-        <span className="eyebrow">
-          WELCOME BACK
-        </span>
+      <section className="auth-shell">
+        <div className="auth-promo">
+          <span className="auth-promo-label">
+            BLUSH & BLOOM
+          </span>
 
-        <h1>Login</h1>
+          <div>
+            <p className="eyebrow">
+              YOUR STYLE SPACE
+            </p>
 
-        {error && (
-          <div className="error">
-            {error}
+            <h1>
+              Your wardrobe missed you.
+            </h1>
+
+            <p>
+              Sign in to revisit your
+              favourites, shopping bag and
+              latest orders.
+            </p>
           </div>
-        )}
 
-        <input
-          type="email"
-          placeholder="Email address"
-          value={email}
-          onChange={(e) =>
-            setEmail(
-              e.target.value
-            )
+          <div className="auth-promo-note">
+            soft looks • bold moods • your way
+          </div>
+        </div>
+
+        <form
+          className="auth-card"
+          onSubmit={
+            handleSubmit
           }
-          required
-        />
+        >
+          <span className="eyebrow">
+            WELCOME BACK
+          </span>
 
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) =>
-            setPassword(
-              e.target.value
-            )
-          }
-          required
-        />
+          <h2>
+            Sign in
+          </h2>
 
-        <button className="btn btn-dark">
-          Login
-        </button>
+          <p className="auth-intro">
+            Continue your Blush & Bloom
+            shopping journey.
+          </p>
 
-        <p>
-          Don't have an account?{" "}
-          <Link to="/register">
-            Register
-          </Link>
-        </p>
-      </form>
+          {error && (
+            <div className="error">
+              {error}
+            </div>
+          )}
+
+          <label className="field">
+            <span>
+              Email address
+            </span>
+
+            <input
+              type="email"
+              placeholder="you@example.com"
+              value={email}
+              onChange={(
+                event
+              ) =>
+                setEmail(
+                  event.target
+                    .value
+                )
+              }
+              required
+            />
+          </label>
+
+          <label className="field password-field">
+            <span>
+              Password
+            </span>
+
+            <div className="password-input-wrap">
+              <input
+                type={
+                  showPassword
+                    ? "text"
+                    : "password"
+                }
+                placeholder="Enter your password"
+                value={
+                  password
+                }
+                onChange={(
+                  event
+                ) =>
+                  setPassword(
+                    event.target
+                      .value
+                  )
+                }
+                required
+              />
+
+              <button
+                type="button"
+                onClick={() =>
+                  setShowPassword(
+                    (
+                      current
+                    ) =>
+                      !current
+                  )
+                }
+              >
+                {showPassword
+                  ? "Hide"
+                  : "Show"}
+              </button>
+            </div>
+          </label>
+
+          <button
+            className="btn btn-primary full-width auth-submit"
+            disabled={
+              submitting
+            }
+          >
+            {submitting
+              ? "Signing in..."
+              : "Sign in"}
+          </button>
+
+          <p className="auth-switch">
+            New here?{" "}
+
+            <Link to="/register">
+              Create an account
+            </Link>
+          </p>
+        </form>
+      </section>
     </main>
   );
 }

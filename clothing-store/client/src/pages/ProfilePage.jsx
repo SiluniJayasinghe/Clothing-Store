@@ -11,6 +11,7 @@ import {
 
 function ProfilePage() {
   const {
+    user,
     setUser
   } = useAuth();
 
@@ -34,43 +35,78 @@ function ProfilePage() {
     setMessage
   ] = useState("");
 
+  const [
+    error,
+    setError
+  ] = useState("");
+
+  const [
+    saving,
+    setSaving
+  ] = useState(false);
+
   useEffect(() => {
     const loadProfile =
       async () => {
-        const response =
-          await api.get(
-            "/users/profile"
+        try {
+          const response =
+            await api.get(
+              "/users/profile"
+            );
+
+          const profile =
+            response.data;
+
+          setForm({
+            firstName:
+              profile.firstName ||
+              "",
+
+            lastName:
+              profile.lastName ||
+              "",
+
+            phone:
+              profile.phone ||
+              "",
+
+            addressLine1:
+              profile.address
+                ?.addressLine1 ||
+              "",
+
+            addressLine2:
+              profile.address
+                ?.addressLine2 ||
+              "",
+
+            city:
+              profile.address
+                ?.city ||
+              "",
+
+            district:
+              profile.address
+                ?.district ||
+              "",
+
+            postalCode:
+              profile.address
+                ?.postalCode ||
+              "",
+
+            country:
+              profile.address
+                ?.country ||
+              "Sri Lanka"
+          });
+        } catch (
+          loadError
+        ) {
+          setError(
+            "Unable to load your profile."
           );
-
-        const user =
-          response.data;
-
-        setForm({
-          firstName:
-            user.firstName || "",
-          lastName:
-            user.lastName || "",
-          phone: user.phone || "",
-          addressLine1:
-            user.address
-              ?.addressLine1 || "",
-          addressLine2:
-            user.address
-              ?.addressLine2 || "",
-          city:
-            user.address?.city ||
-            "",
-          district:
-            user.address
-              ?.district || "",
-          postalCode:
-            user.address
-              ?.postalCode || "",
-          country:
-            user.address
-              ?.country ||
-            "Sri Lanka"
-        });
+        }
       };
 
     loadProfile();
@@ -80,6 +116,7 @@ function ProfilePage() {
     (event) => {
       setForm({
         ...form,
+
         [event.target.name]:
           event.target.value
       });
@@ -89,86 +126,309 @@ function ProfilePage() {
     async (event) => {
       event.preventDefault();
 
-      const response =
-        await api.put(
-          "/users/profile",
-          {
-            firstName:
-              form.firstName,
-            lastName:
-              form.lastName,
-            phone: form.phone,
+      setSaving(true);
 
-            address: {
-              addressLine1:
-                form.addressLine1,
-              addressLine2:
-                form.addressLine2,
-              city: form.city,
-              district:
-                form.district,
-              postalCode:
-                form.postalCode,
-              country:
-                form.country
+      setMessage("");
+
+      setError("");
+
+      try {
+        const response =
+          await api.put(
+            "/users/profile",
+            {
+              firstName:
+                form.firstName,
+
+              lastName:
+                form.lastName,
+
+              phone:
+                form.phone,
+
+              address: {
+                addressLine1:
+                  form.addressLine1,
+
+                addressLine2:
+                  form.addressLine2,
+
+                city:
+                  form.city,
+
+                district:
+                  form.district,
+
+                postalCode:
+                  form.postalCode,
+
+                country:
+                  form.country
+              }
             }
-          }
+          );
+
+        setUser(
+          response.data
         );
 
-      setUser(response.data);
-
-      setMessage(
-        "Profile updated successfully."
-      );
+        setMessage(
+          "Your profile has been updated."
+        );
+      } catch (
+        saveError
+      ) {
+        setError(
+          saveError.response
+            ?.data
+            ?.message ||
+            "Unable to update your profile."
+        );
+      } finally {
+        setSaving(false);
+      }
     };
 
+  const initials =
+    `${user?.firstName?.[0] || ""}${user?.lastName?.[0] || ""}`.toUpperCase();
+
   return (
-    <main className="container section">
+    <main className="container section profile-page">
       <div className="page-heading">
         <span className="eyebrow">
-          ACCOUNT
+          MY ACCOUNT
         </span>
 
-        <h1>My Profile</h1>
+        <h1>
+          Profile
+        </h1>
+
+        <p className="heading-copy">
+          Keep your contact and delivery
+          details up to date.
+        </p>
       </div>
 
-      <form
-        className="profile-form"
-        onSubmit={handleSubmit}
-      >
-        {message && (
-          <div className="success">
-            {message}
+      <div className="profile-layout">
+        <aside className="profile-summary-card">
+          <div className="profile-avatar">
+            {initials ||
+              "B"}
           </div>
-        )}
 
-        {Object.entries(form).map(
-          ([key, value]) => (
-            <input
-              key={key}
-              name={key}
-              value={value}
-              onChange={handleChange}
-              placeholder={
-                key
-                  .replace(
-                    /([A-Z])/g,
-                    " $1"
-                  )
-                  .replace(
-                    /^./,
-                    (str) =>
-                      str.toUpperCase()
-                  )
-              }
-            />
-          )
-        )}
+          <h2>
+            {user?.firstName}{" "}
+            {user?.lastName}
+          </h2>
 
-        <button className="btn btn-dark">
-          Save Changes
-        </button>
-      </form>
+          <p>
+            {user?.email}
+          </p>
+
+          <div className="profile-divider" />
+
+          <span>
+            Blush & Bloom member
+          </span>
+        </aside>
+
+        <form
+          className="profile-form-card"
+          onSubmit={
+            handleSubmit
+          }
+        >
+          <div className="profile-form-heading">
+            <h2>
+              Personal details
+            </h2>
+
+            <p>
+              These details are used to
+              make checkout quicker.
+            </p>
+          </div>
+
+          {message && (
+            <div className="success">
+              {message}
+            </div>
+          )}
+
+          {error && (
+            <div className="error">
+              {error}
+            </div>
+          )}
+
+          <div className="form-grid">
+            <label className="field">
+              <span>
+                First name
+              </span>
+
+              <input
+                name="firstName"
+                value={
+                  form.firstName
+                }
+                onChange={
+                  handleChange
+                }
+                required
+              />
+            </label>
+
+            <label className="field">
+              <span>
+                Last name
+              </span>
+
+              <input
+                name="lastName"
+                value={
+                  form.lastName
+                }
+                onChange={
+                  handleChange
+                }
+                required
+              />
+            </label>
+
+            <label className="field full-span">
+              <span>
+                Phone number
+              </span>
+
+              <input
+                name="phone"
+                value={
+                  form.phone
+                }
+                onChange={
+                  handleChange
+                }
+              />
+            </label>
+          </div>
+
+          <div className="profile-section-title">
+            <h3>
+              Delivery address
+            </h3>
+          </div>
+
+          <div className="form-grid">
+            <label className="field full-span">
+              <span>
+                Address line 1
+              </span>
+
+              <input
+                name="addressLine1"
+                value={
+                  form.addressLine1
+                }
+                onChange={
+                  handleChange
+                }
+              />
+            </label>
+
+            <label className="field full-span">
+              <span>
+                Address line 2
+              </span>
+
+              <input
+                name="addressLine2"
+                value={
+                  form.addressLine2
+                }
+                onChange={
+                  handleChange
+                }
+              />
+            </label>
+
+            <label className="field">
+              <span>
+                City
+              </span>
+
+              <input
+                name="city"
+                value={
+                  form.city
+                }
+                onChange={
+                  handleChange
+                }
+              />
+            </label>
+
+            <label className="field">
+              <span>
+                District
+              </span>
+
+              <input
+                name="district"
+                value={
+                  form.district
+                }
+                onChange={
+                  handleChange
+                }
+              />
+            </label>
+
+            <label className="field">
+              <span>
+                Postal code
+              </span>
+
+              <input
+                name="postalCode"
+                value={
+                  form.postalCode
+                }
+                onChange={
+                  handleChange
+                }
+              />
+            </label>
+
+            <label className="field">
+              <span>
+                Country
+              </span>
+
+              <input
+                name="country"
+                value={
+                  form.country
+                }
+                onChange={
+                  handleChange
+                }
+              />
+            </label>
+          </div>
+
+          <button
+            className="btn btn-primary profile-save"
+            disabled={
+              saving
+            }
+          >
+            {saving
+              ? "Saving..."
+              : "Save changes"}
+          </button>
+        </form>
+      </div>
     </main>
   );
 }

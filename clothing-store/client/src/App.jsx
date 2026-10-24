@@ -1,11 +1,12 @@
 import {
-  Routes,
-  Route
+  Route,
+  Routes
 } from "react-router-dom";
 
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import ProtectedRoute from "./components/ProtectedRoute";
+import ScrollToTop from "./components/ScrollToTop";
 
 import HomePage from "./pages/HomePage";
 import ProductsPage from "./pages/ProductsPage";
@@ -18,16 +19,22 @@ import CheckoutPage from "./pages/CheckoutPage";
 import OrdersPage from "./pages/OrdersPage";
 import ProfilePage from "./pages/ProfilePage";
 
+import ShopTheLookPage from "./pages/ShopTheLookPage";
+
 function App() {
   return (
     <div className="app">
+      <ScrollToTop />
+
       <Navbar />
 
       <div className="content">
         <Routes>
           <Route
             path="/"
-            element={<HomePage />}
+            element={
+              <HomePage />
+            }
           />
 
           <Route
@@ -45,8 +52,17 @@ function App() {
           />
 
           <Route
+            path="/looks/:lookId"
+            element={
+              <ShopTheLookPage />
+            }
+          />
+
+          <Route
             path="/login"
-            element={<LoginPage />}
+            element={
+              <LoginPage />
+            }
           />
 
           <Route

@@ -4,10 +4,16 @@ import {
 } from "react";
 
 import {
+  Link,
   useSearchParams
 } from "react-router-dom";
 
 import api from "../services/api";
+
+import {
+  CheckIcon,
+  PackageIcon
+} from "../components/Icons";
 
 function OrdersPage() {
   const [
@@ -16,11 +22,18 @@ function OrdersPage() {
   ] = useState([]);
 
   const [
+    loading,
+    setLoading
+  ] = useState(true);
+
+  const [
     searchParams
   ] = useSearchParams();
 
   const success =
-    searchParams.get("success");
+    searchParams.get(
+      "success"
+    );
 
   useEffect(() => {
     const loadOrders =
@@ -32,63 +45,117 @@ function OrdersPage() {
             );
 
           setOrders(
-            response.data
+            response.data ||
+            []
           );
         } catch (error) {
           console.error(error);
+        } finally {
+          setLoading(false);
         }
       };
 
     loadOrders();
   }, []);
 
+  if (loading) {
+    return (
+      <div className="page-message">
+        Loading your orders...
+      </div>
+    );
+  }
+
   return (
-    <main className="container section">
+    <main className="container section orders-page">
       <div className="page-heading">
         <span className="eyebrow">
           YOUR PURCHASES
         </span>
 
-        <h1>My Orders</h1>
+        <h1>
+          My Orders
+        </h1>
+
+        <p className="heading-copy">
+          Everything you have ordered,
+          all in one place.
+        </p>
       </div>
 
       {success && (
-        <div className="success">
-          ✓ Your order was placed
-          successfully.
+        <div className="order-success-banner">
+          <span className="success-icon">
+            <CheckIcon />
+          </span>
+
+          <div>
+            <strong>
+              Order placed successfully!
+            </strong>
+
+            <p>
+              Thank you for shopping with
+              Blush & Bloom.
+            </p>
+          </div>
         </div>
       )}
 
-      {orders.length === 0 ? (
-        <div className="empty-state">
-          You haven't placed any
-          orders yet.
+      {orders.length ===
+      0 ? (
+        <div className="empty-state soft-empty">
+          <span className="empty-icon-circle">
+            <PackageIcon
+              size={30}
+            />
+          </span>
+
+          <h2>
+            No orders yet
+          </h2>
+
+          <p>
+            When you place your first
+            order, you will find it here.
+          </p>
+
+          <Link
+            to="/products"
+            className="btn btn-primary"
+          >
+            Start shopping
+          </Link>
         </div>
       ) : (
         <div className="orders-list">
           {orders.map(
             (order) => (
               <article
-                key={order._id}
+                key={
+                  order._id
+                }
                 className="order-card"
               >
                 <div className="order-card-header">
                   <div>
                     <span>
-                      Order
+                      Order number
                     </span>
 
                     <strong>
                       #
                       {order._id
-                        .slice(-8)
+                        .slice(
+                          -8
+                        )
                         .toUpperCase()}
                     </strong>
                   </div>
 
                   <div>
                     <span>
-                      Date
+                      Placed on
                     </span>
 
                     <strong>
@@ -105,54 +172,95 @@ function OrdersPage() {
 
                     <strong>
                       Rs.{" "}
-                      {order.total.toLocaleString()}
+                      {Number(
+                        order.total
+                      ).toLocaleString()}
                     </strong>
                   </div>
 
-                  <span className="status">
+                  <span
+                    className={
+                      `status status-${order.orderStatus}`
+                    }
+                  >
                     {
                       order.orderStatus
                     }
                   </span>
                 </div>
 
-                {order.items.map(
-                  (item) => (
-                    <div
-                      className="order-product"
-                      key={item._id}
-                    >
-                      <img
-                        src={
-                          item.image
+                <div className="order-items">
+                  {order.items.map(
+                    (item) => (
+                      <div
+                        className="order-product"
+                        key={
+                          item._id
                         }
-                        alt={
-                          item.productName
-                        }
-                      />
+                      >
+                        <div className="order-product-image">
+                          <img
+                            src={
+                              item.image
+                            }
+                            alt={
+                              item.productName
+                            }
+                          />
+                        </div>
 
-                      <div>
-                        <strong>
-                          {
-                            item.productName
-                          }
-                        </strong>
+                        <div className="order-product-copy">
+                          <strong>
+                            {
+                              item.productName
+                            }
+                          </strong>
 
-                        <p>
-                          {item.size} /{" "}
-                          {item.color}
-                        </p>
+                          <span>
+                            {
+                              item.size
+                            }{" "}
+                            /{" "}
+                            {
+                              item.color
+                            }
+                          </span>
 
-                        <p>
-                          Qty:{" "}
-                          {
+                          <span>
+                            Quantity:{" "}
+                            {
+                              item.quantity
+                            }
+                          </span>
+                        </div>
+
+                        <strong className="order-item-price">
+                          Rs.{" "}
+                          {(
+                            item.price *
                             item.quantity
-                          }
-                        </p>
+                          ).toLocaleString()}
+                        </strong>
                       </div>
-                    </div>
-                  )
-                )}
+                    )
+                  )}
+                </div>
+
+                <div className="order-card-footer">
+                  <span>
+                    Payment:{" "}
+                    {order.paymentMethod ===
+                    "cash_on_delivery"
+                      ? "Cash on Delivery"
+                      : "Demo Card"}
+                  </span>
+
+                  <span className="payment-status">
+                    {
+                      order.paymentStatus
+                    }
+                  </span>
+                </div>
               </article>
             )
           )}
