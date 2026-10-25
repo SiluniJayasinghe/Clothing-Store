@@ -18,8 +18,19 @@ import {
 
 function ProductsPage() {
   const [
-    searchParams
+    searchParams,
+    setSearchParams
   ] = useSearchParams();
+
+  const category =
+    searchParams.get(
+      "category"
+    ) || "";
+
+  const sort =
+    searchParams.get(
+      "sort"
+    ) || "";
 
   const [
     products,
@@ -37,41 +48,39 @@ function ProductsPage() {
   ] = useState("");
 
   const [
-    category,
-    setCategory
-  ] = useState(
-    searchParams.get(
-      "category"
-    ) || ""
-  );
-
-  const [
-    sort,
-    setSort
-  ] = useState(
-    searchParams.get(
-      "sort"
-    ) || ""
-  );
-
-  const [
     loading,
     setLoading
   ] = useState(true);
 
-  useEffect(() => {
-    setCategory(
-      searchParams.get(
-        "category"
-      ) || ""
-    );
+  const updateFilterParam = (
+    parameter,
+    value
+  ) => {
+    setSearchParams(
+      (currentParams) => {
+        const nextParams =
+          new URLSearchParams(
+            currentParams
+          );
 
-    setSort(
-      searchParams.get(
-        "sort"
-      ) || ""
+        if (value) {
+          nextParams.set(
+            parameter,
+            value
+          );
+        } else {
+          nextParams.delete(
+            parameter
+          );
+        }
+
+        return nextParams;
+      },
+      {
+        replace: true
+      }
     );
-  }, [searchParams]);
+  };
 
   useEffect(() => {
     const loadAllProducts =
@@ -192,7 +201,8 @@ function ProductsPage() {
             onChange={(
               event
             ) =>
-              setCategory(
+              updateFilterParam(
+                "category",
                 event.target
                   .value
               )
@@ -219,7 +229,8 @@ function ProductsPage() {
             onChange={(
               event
             ) =>
-              setSort(
+              updateFilterParam(
+                "sort",
                 event.target
                   .value
               )
@@ -253,7 +264,10 @@ function ProductsPage() {
                   : ""
               }
               onClick={() =>
-                setCategory("")
+                updateFilterParam(
+                  "category",
+                  ""
+                )
               }
             >
               All
@@ -270,7 +284,8 @@ function ProductsPage() {
                       : ""
                   }
                   onClick={() =>
-                    setCategory(
+                    updateFilterParam(
+                      "category",
                       item
                     )
                   }
@@ -300,8 +315,12 @@ function ProductsPage() {
               className="clear-filters"
               onClick={() => {
                 setSearch("");
-                setCategory("");
-                setSort("");
+                setSearchParams(
+                  new URLSearchParams(),
+                  {
+                    replace: true
+                  }
+                );
               }}
             >
               Clear filters

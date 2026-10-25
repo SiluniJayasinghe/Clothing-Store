@@ -14,7 +14,7 @@ import api from "../services/api";
 
 import {
   useAuth
-} from "../context/AuthContext";
+} from "../context/AuthContextValue";
 
 import {
   HeartIcon,
@@ -23,6 +23,7 @@ import {
 } from "../components/Icons";
 
 import {
+  getColorThumbnailScale,
   getProductImageSizeClass
 } from "../utils/productImageSizing";
 
@@ -407,7 +408,7 @@ function ProductDetailsPage() {
         setMessage(
           "Saved to your wishlist."
         );
-      } catch (error) {
+      } catch {
         setMessageType(
           "error"
         );
@@ -535,6 +536,11 @@ function ProductDetailsPage() {
                           alt={
                             `${product.name} ${option.color}`
                           }
+                          style={{
+                            scale: getColorThumbnailScale(
+                              option.image
+                            )
+                          }}
                         />
                       </div>
 

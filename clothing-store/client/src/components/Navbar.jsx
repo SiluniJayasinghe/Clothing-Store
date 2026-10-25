@@ -1,15 +1,15 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../context/AuthContextValue";
 
 import { BagIcon, CloseIcon, HeartIcon, MenuIcon, UserIcon } from "./Icons";
 
 function Navbar() {
   const { user, logout } = useAuth();
 
-  const [menuOpen, setMenuOpen] = useState(false);
+  const [menuOpenLocationKey, setMenuOpenLocationKey] = useState(null);
 
   const [accountOpen, setAccountOpen] = useState(false);
 
@@ -17,14 +17,13 @@ function Navbar() {
 
   const navigate = useNavigate();
 
-  useEffect(() => {
-    setMenuOpen(false);
-  }, [location.pathname, location.search]);
+  const menuOpen =
+    menuOpenLocationKey === location.key;
 
   const handleLogout = () => {
     logout();
 
-    setMenuOpen(false);
+    setMenuOpenLocationKey(null);
     setAccountOpen(false);
 
     navigate("/");
@@ -46,7 +45,7 @@ function Navbar() {
       <header className="navbar">
         <button
           className="icon-button mobile-menu-button"
-          onClick={() => setMenuOpen(true)}
+          onClick={() => setMenuOpenLocationKey(location.key)}
           aria-label="Open menu"
         >
           <MenuIcon size={23} />
@@ -153,7 +152,7 @@ function Navbar() {
 
       <div
         className={`mobile-drawer-backdrop ${menuOpen ? "show" : ""}`}
-        onClick={() => setMenuOpen(false)}
+        onClick={() => setMenuOpenLocationKey(null)}
       />
 
       <aside className={`mobile-drawer ${menuOpen ? "open" : ""}`}>
@@ -162,7 +161,7 @@ function Navbar() {
 
           <button
             className="icon-button"
-            onClick={() => setMenuOpen(false)}
+            onClick={() => setMenuOpenLocationKey(null)}
             aria-label="Close menu"
           >
             <CloseIcon size={24} />

@@ -10,8 +10,15 @@ import {
 import api from "../services/api";
 
 import ProductCard from "../components/ProductCard";
+import {
+  useWishlist
+} from "../context/WishlistContextValue";
 
 function WishlistPage() {
+  const {
+    removeProduct: removeWishlistProduct
+  } = useWishlist();
+
   const [
     products,
     setProducts
@@ -22,42 +29,40 @@ function WishlistPage() {
     setLoading
   ] = useState(true);
 
-  const loadWishlist =
-    async () => {
-      try {
-        const response =
-          await api.get(
-            "/wishlist"
-          );
-
-        setProducts(
-          response.data
-            .products ||
-            []
-        );
-      } catch (error) {
-        console.error(error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
   useEffect(() => {
-    loadWishlist();
+    let active = true;
+
+    api
+      .get("/wishlist")
+      .then((response) => {
+        if (active) {
+          setProducts(
+            response.data.products ||
+            []
+          );
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      })
+      .finally(() => {
+        if (active) {
+          setLoading(false);
+        }
+      });
+
+    return () => {
+      active = false;
+    };
   }, []);
 
   const removeProduct =
     async (productId) => {
       try {
-        const response =
-          await api.delete(
-            `/wishlist/${productId}`
-          );
-
         setProducts(
-          response.data
-            .products ||
-            []
+          await removeWishlistProduct(
+            productId
+          )
         );
       } catch (error) {
         console.error(error);

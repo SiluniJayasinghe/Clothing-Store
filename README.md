@@ -1,39 +1,82 @@
-# Clothing Store E-Commerce Web Application
+# Blush & Bloom
 
-A full-stack customer-facing e-commerce web application developed using the **MERN stack** as part of the Web Application Development module.
+Blush & Bloom is a full-stack fashion e-commerce web application for a customer-facing clothing store. The project was built as a Web Application Development assignment and uses a React frontend, Express API, and MongoDB database.
 
-The application allows customers to create accounts, browse clothing products, search and filter products, select product variants, manage a shopping cart and wishlist, place orders, and manage their profile.
-
-Administrative functionality is intentionally excluded from the current project scope. Product data is populated into MongoDB using a database seed script.
+The app allows users to browse products, search and filter listings, view product details, add items to a cart or wishlist, checkout, manage orders, and update their profile. It is designed as a polished storefront experience for women’s fashion with a modern UI and protected customer routes.
 
 ---
 
 ## Project Overview
 
-The Clothing Store application is designed to provide customers with a simple and responsive online shopping experience.
+This repository contains a complete storefront application organized into two main parts:
 
-The system consists of:
+- `clothing-store/client` – React + Vite frontend
+- `clothing-store/server` – Node.js + Express API and MongoDB integration
 
-- A React.js frontend
-- A Node.js and Express.js REST API
-- A MongoDB database
-- JWT-based authentication
-- Persistent carts, wishlists and orders
-
-The application follows a client-server architecture where the React frontend communicates with the Express backend through REST API endpoints.
+The frontend communicates with the backend through REST endpoints, while the server handles authentication, product queries, cart operations, wishlist actions, order creation, and user profile management.
 
 ---
 
-## Technology Stack
+## Features
+
+### Customer authentication
+
+- User registration
+- Login and logout
+- JWT-based protected routes
+- Password hashing with `bcryptjs`
+- Current user retrieval via authenticated API requests
+
+### Product catalog and browsing
+
+- Product listing page
+- Search by product name
+- Filter by category
+- Sorting by newest or price
+- Featured product sections on the homepage
+- Category highlights and curated styling cards
+
+### Product details and variants
+
+- Individual product detail pages
+- Product description, price, category, and inventory information
+- Size and colour variants
+- Variant-specific images and stock handling
+
+### Shopping experience
+
+- Add items to shopping cart
+- Update item quantity
+- Remove products from cart
+- Free-delivery progress indicator
+- Checkout flow with order summary
+
+### Wishlist and orders
+
+- Save favourite products to a wishlist
+- View and manage wishlist items
+- Place orders from the cart
+- View order history and current user orders
+- User profile page with saved account details
+
+### Store branding and UX
+
+- Responsive storefront layout
+- Mobile-friendly navigation drawer
+- Hero banner and curated “shop the look” pages
+- “Fresh styles for every mood” storefront branding
+
+---
+
+## Tech Stack
 
 ### Frontend
 
-- React.js
+- React
 - Vite
-- React Router
+- React Router DOM
 - Axios
-- React Context API
-- CSS3
+- CSS custom styling
 - JavaScript
 
 ### Backend
@@ -41,7 +84,7 @@ The application follows a client-server architecture where the React frontend co
 - Node.js
 - Express.js
 - Mongoose
-- JSON Web Tokens
+- JWT
 - bcryptjs
 - CORS
 - Helmet
@@ -51,79 +94,166 @@ The application follows a client-server architecture where the React frontend co
 ### Database
 
 - MongoDB
-- MongoDB Compass
 
-### Development Tools
+### Development tools
 
-- Visual Studio Code
 - Git
 - GitHub
+- Visual Studio Code
 - npm
 
 ---
 
-## Main Features
+## Project Structure
 
-### User Authentication
+```text
+WAD project test/
+├── README.md
+└── clothing-store/
+    ├── client/
+    │   ├── public/
+    │   ├── src/
+    │   ├── index.html
+    │   ├── package.json
+    │   └── vite.config.*
+    └── server/
+        ├── src/
+        ├── .env.example
+        └── package.json
+```
 
-Users can:
+### Client app
 
-- Register a new customer account
-- Login using email and password
-- Logout from the application
-- Stay authenticated using JSON Web Tokens
-- Access protected customer pages after authentication
+The frontend is under `clothing-store/client/src` and includes pages such as:
 
-Passwords are hashed using `bcryptjs` before being stored in MongoDB.
+- Home
+- Shop products
+- Product details
+- Cart
+- Wishlist
+- Checkout
+- Orders
+- Profile
+- Login/Register
 
----
+### Server app
 
-### Product Catalogue
+The backend is under `clothing-store/server/src` and includes:
 
-Customers can:
-
-- View all available clothing products
-- Browse different product categories
-- Search products by name
-- Filter products by category
-- Sort products by price
-- Sort products by newest products
-- View featured products on the home page
-
----
-
-### Product Details
-
-Each product has a dedicated product details page.
-
-Customers can view:
-
-- Product name
-- Description
-- Category
-- Price
-- Product image
-- Available sizes
-- Available colours
-- Available stock
-
-Customers must select a product variant before adding the product to the shopping cart.
+- `app.js` – Express app configuration
+- `server.js` – server startup and database connection
+- `config/db.js` – MongoDB connection setup
+- `controllers/` – auth, product, cart, wishlist, order, and user logic
+- `routes/` – API route definitions
+- `models/` – Mongoose schemas
+- `middleware/` – auth and error handling
+- `seed.js` – product data seeding script
 
 ---
 
-### Clothing Variants
+## Setup and Installation
 
-Products support different variations based on:
+### 1. Clone the repository
 
-- Size
-- Colour
-- Stock quantity
+```bash
+git clone <repository-url>
+cd "WAD project test"
+```
+
+### 2. Install frontend dependencies
+
+```bash
+cd clothing-store/client
+npm install
+```
+
+### 3. Install backend dependencies
+
+```bash
+cd ../server
+npm install
+```
+
+### 4. Configure environment variables
+
+Create a `.env` file inside `clothing-store/server` based on `.env.example`.
 
 Example:
 
-```text
-Classic Black T-Shirt
-│
-├── Small / Black
-├── Medium / Black
-└── Large / Black
+```env
+PORT=5000
+MONGO_URI=your_mongodb_connection_string
+JWT_SECRET=your_secure_jwt_secret
+CLIENT_URL=http://localhost:5173
+VITE_API_URL=http://localhost:5000/api
+```
+
+### 5. Seed the database
+
+```bash
+npm run seed
+```
+
+This loads clothing product data from the public product assets into MongoDB.
+
+### 6. Run the app
+
+Start the backend:
+
+```bash
+cd clothing-store/server
+npm run dev
+```
+
+Start the frontend in a second terminal:
+
+```bash
+cd clothing-store/client
+npm run dev
+```
+
+Then open the app in the browser at:
+
+- Frontend: `http://localhost:5173`
+- Backend API: `http://localhost:5000`
+
+---
+
+## Available Scripts
+
+### Frontend
+
+```bash
+npm run dev
+npm run build
+npm run preview
+npm run lint
+```
+
+### Backend
+
+```bash
+npm run dev
+npm run start
+npm run seed
+```
+
+---
+
+## Current Scope
+
+This project focuses on customer-side e-commerce functionality and intentionally does not include an admin dashboard or back-office management system. The primary goal is to provide a complete shopping experience for customers with a clean storefront, product discovery flow, and order management.
+
+---
+
+## Notes
+
+- The app brand name is **Blush & Bloom**.
+- Product images are stored in the frontend public assets and are used to seed the MongoDB catalog.
+- The app uses JWT protection on authenticated routes such as cart, wishlist, profile, orders, and checkout-related actions.
+
+---
+
+## License
+
+This project is for academic learning and coursework purposes unless otherwise specified by the repository owner.

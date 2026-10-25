@@ -4,7 +4,7 @@ import {
 
 import {
   useAuth
-} from "../context/AuthContext";
+} from "../context/AuthContextValue";
 
 function ProtectedRoute({
   children

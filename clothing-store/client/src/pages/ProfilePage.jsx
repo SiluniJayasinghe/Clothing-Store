@@ -7,7 +7,7 @@ import api from "../services/api";
 
 import {
   useAuth
-} from "../context/AuthContext";
+} from "../context/AuthContextValue";
 
 function ProfilePage() {
   const {
@@ -100,9 +100,7 @@ function ProfilePage() {
                 ?.country ||
               "Sri Lanka"
           });
-        } catch (
-          loadError
-        ) {
+        } catch {
           setError(
             "Unable to load your profile."
           );

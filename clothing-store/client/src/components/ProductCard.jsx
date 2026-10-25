@@ -7,11 +7,12 @@ import {
   useNavigate
 } from "react-router-dom";
 
-import api from "../services/api";
-
 import {
   useAuth
-} from "../context/AuthContext";
+} from "../context/AuthContextValue";
+import {
+  useWishlist
+} from "../context/WishlistContextValue";
 
 import {
   HeartIcon
@@ -28,18 +29,22 @@ function ProductCard({
     user
   } = useAuth();
 
+  const {
+    productIds,
+    loading: wishlistLoading,
+    addProduct
+  } = useWishlist();
+
   const navigate =
     useNavigate();
-
-  const [
-    saved,
-    setSaved
-  ] = useState(false);
 
   const [
     saving,
     setSaving
   ] = useState(false);
+
+  const saved =
+    productIds.includes(product._id);
 
   const addToWishlist =
     async (event) => {
@@ -53,19 +58,15 @@ function ProductCard({
 
       if (
         saved ||
-        saving
+        saving ||
+        wishlistLoading
       ) {
         return;
       }
 
       try {
         setSaving(true);
-
-        await api.post(
-          `/wishlist/${product._id}`
-        );
-
-        setSaved(true);
+        await addProduct(product._id);
       } catch (error) {
         console.error(error);
       } finally {
@@ -90,7 +91,16 @@ function ProductCard({
               }`
             }
             onClick={addToWishlist}
-            aria-label="Add to wishlist"
+            aria-label={
+              saved
+                ? "Already in wishlist"
+                : "Add to wishlist"
+            }
+            aria-pressed={saved}
+            disabled={
+              wishlistLoading ||
+              saving
+            }
           >
             <HeartIcon size={19} />
           </button>

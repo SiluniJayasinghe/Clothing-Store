@@ -13,20 +13,28 @@ function CartPage() {
 
   const [loading, setLoading] = useState(true);
 
-  const loadCart = async () => {
-    try {
-      const response = await api.get("/cart");
-
-      setCart(response.data);
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   useEffect(() => {
-    loadCart();
+    let active = true;
+
+    api
+      .get("/cart")
+      .then((response) => {
+        if (active) {
+          setCart(response.data);
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      })
+      .finally(() => {
+        if (active) {
+          setLoading(false);
+        }
+      });
+
+    return () => {
+      active = false;
+    };
   }, []);
 
   const updateQuantity = async (itemId, quantity) => {

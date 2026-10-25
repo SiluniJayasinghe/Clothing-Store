@@ -12,9 +12,8 @@ import {
 
 import App from "./App.jsx";
 
-import {
-  AuthProvider
-} from "./context/AuthContext.jsx";
+import AuthProvider from "./context/AuthContext.jsx";
+import WishlistProvider from "./context/WishlistContext.jsx";
 
 import "./index.css";
 
@@ -24,7 +23,9 @@ createRoot(
   <StrictMode>
     <BrowserRouter>
       <AuthProvider>
-        <App />
+        <WishlistProvider>
+          <App />
+        </WishlistProvider>
       </AuthProvider>
     </BrowserRouter>
   </StrictMode>
