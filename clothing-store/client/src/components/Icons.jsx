@@ -189,6 +189,12 @@ export const TrashIcon = (props) => (
   </IconBase>
 );
 
+export const EditIcon = (props) => (
+  <IconBase {...props}>
+    <path d="m15 5 4 4M4 20l4.5-1 10.8-10.8a2.1 2.1 0 0 0-3-3L5.5 16 4 20Z" />
+  </IconBase>
+);
+
 export const CheckIcon = (props) => (
   <IconBase {...props}>
     <path d="m5 12 4 4L19 6" />

@@ -11,6 +11,7 @@ import cartRoutes from "./routes/cartRoutes.js";
 import wishlistRoutes from "./routes/wishlistRoutes.js";
 import orderRoutes from "./routes/orderRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
+import reviewRoutes from "./routes/reviewRoutes.js";
 
 import {
   notFound,
@@ -93,6 +94,11 @@ app.use(
 app.use(
   "/api/users",
   userRoutes
+);
+
+app.use(
+  "/api/reviews",
+  reviewRoutes
 );
 
 app.use(notFound);

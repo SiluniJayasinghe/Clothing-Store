@@ -24,11 +24,17 @@ function Footer() {
         <div>
           <h4>Shop</h4>
 
-          <Link to="/products">
+          <Link
+            to="/products"
+            state={{ scrollToProducts: true }}
+          >
             All styles
           </Link>
 
-          <Link to="/products?sort=newest">
+          <Link
+            to="/products?sort=newest"
+            state={{ scrollToProducts: true }}
+          >
             New in
           </Link>
 

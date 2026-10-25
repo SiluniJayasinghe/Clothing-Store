@@ -174,7 +174,10 @@ function ProductsPage() {
         </div>
       </section>
 
-      <section className="container shop-section">
+      <section
+        id="shop-products"
+        className="container shop-section"
+      >
         <div className="filter-bar">
           <label className="search-field">
             <SearchIcon
